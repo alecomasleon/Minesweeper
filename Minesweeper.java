@@ -1,5 +1,3 @@
-import org.checkerframework.checker.units.qual.C;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -96,10 +94,7 @@ public class Minesweeper {
 
     private Color getColor(int row, int col) {
         if (engine.getMarked()[row][col]) {
-            if (((row + col) % 2) == 0) {
-                return new Color(255, 207, 2);
-            }
-            return Color.ORANGE;
+            return getMarkedColor(row, col);
         }
 
         if (engine.getRevealed()[row][col]) {
@@ -114,6 +109,14 @@ public class Minesweeper {
         }
 
         return new Color(162, 209, 72);
+    }
+
+    private Color getMarkedColor(int row, int col) {
+        if (((row + col) % 2) == 0) {
+            return new Color(255, 207, 2);
+        }
+
+        return Color.ORANGE;
     }
 
     private void updateTiles() {
@@ -183,12 +186,10 @@ public class Minesweeper {
 
     private void mark(int row, int col) {
         if (engine.mark(row, col)) {
-            if (engine.getMarked()[row][col]) {
-                board[row][col].setBackground(getColor(row, col));
-            } else {
+            if (!engine.getMarked()[row][col]) {
                 board[row][col].removeAll();
-                board[row][col].setBackground(getColor(row, col));
             }
+            board[row][col].setBackground(getColor(row, col));
         }
     }
 
@@ -197,9 +198,7 @@ public class Minesweeper {
             updateTiles();
 
             if (engine.getGameOver()) {
-                if (!engine.getWon()) {
-                    loss();
-                }
+                revealBombs();
                 gameOver();
             }
         }
@@ -214,11 +213,15 @@ public class Minesweeper {
         board[rows-1][cols-1].setBounds((cols-1) * WIDTH / cols, (rows-1) * HEIGHT / rows, WIDTH / cols, HEIGHT / rows);
     }
 
-    private void loss() {
+    private void revealBombs() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (engine.getBoard()[i][j] == -1) {
-                    board[i][j].setBackground(Color.RED);
+                    if (engine.getWon()) {
+                        board[i][j].setBackground(getMarkedColor(i, j));
+                    } else {
+                        board[i][j].setBackground(Color.RED);
+                    }
                 }
             }
         }
