@@ -149,6 +149,8 @@ public class Minesweeper {
                 }
             }
         }
+        board[0][0].setBackground(Color.BLACK);
+        board[0][0].setBackground(getColor(0, 0));
     }
 
     private Color getTextColor(int tileNum) {
