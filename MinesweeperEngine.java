@@ -1,3 +1,5 @@
+package Minesweeper;
+
 import java.util.Random;
 import java.util.HashSet;
 import com.google.common.collect.ImmutableList;
@@ -8,7 +10,7 @@ public class MinesweeperEngine {
     private final int rows;
     private final int cols;
     private final boolean[][] revealed;
-    private final boolean[][] marked;
+    private boolean[][] marked;
     private final int numMines;
     private boolean gameOver;
     private boolean won;
@@ -27,9 +29,12 @@ public class MinesweeperEngine {
     }
 
     public void makeFirstMove(int row, int col) {
-        firstMoveMade = true;
-        createBoard(row, col);
-        reveal(row, col);
+        if (!marked[row][col]) {
+            firstMoveMade = true;
+            marked = createFalse();
+            createBoard(row, col);
+            reveal(row, col);
+        }
     }
 
     private void createBoard(int fRow, int fCol) {
