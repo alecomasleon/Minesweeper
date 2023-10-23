@@ -1,3 +1,5 @@
+import org.checkerframework.checker.units.qual.C;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -132,6 +134,7 @@ public class Minesweeper {
                             label.setBounds(getXDisplacement(), 0, board[i][j].getWidth(), board[i][j].getHeight());
 
                             Font font = new Font("SansSerif", Font.PLAIN, getFontSize());
+                            label.setForeground(getTextColor(engine.getBoard()[i][j]));
                             label.setFont(font);
 
                             board[i][j].add(label);
@@ -143,6 +146,19 @@ public class Minesweeper {
                 }
             }
         }
+    }
+
+    private Color getTextColor(int tileNum) {
+        return switch (tileNum) {
+            case 1 -> new Color(24, 118, 210);
+            case 2 -> new Color(56, 142, 60);
+            case 3 -> new Color(211, 46, 47);
+            case 4 -> new Color(122, 30, 162);
+            case 5 -> new Color(250, 145, 10);
+            case 6 -> new Color(10, 217, 250);
+            case 7 -> Color.MAGENTA;
+            default -> Color.BLACK;
+        };
     }
 
     private int getFontSize() {
