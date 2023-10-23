@@ -19,7 +19,6 @@ public class MinesweeperEngine {
         this.rows = rows;
         this.cols = cols;
         this.numMines = numMines;
-        // createBoard();
         revealed = createFalse();
         marked = createFalse();
         gameOver = false;
@@ -72,14 +71,14 @@ public class MinesweeperEngine {
     }
 
     private boolean[][] createFalse() {
-        boolean[][] falses = new boolean[rows][cols];
+        boolean[][] falsies = new boolean[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                falses[i][j] = false;
+                falsies[i][j] = false;
             }
         }
 
-        return falses;
+        return falsies;
     }
 
     public boolean mark(int row, int col) {
