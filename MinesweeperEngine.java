@@ -86,6 +86,35 @@ public class MinesweeperEngine {
         return falsies;
     }
 
+    public boolean cord(int row, int col) {
+        if (board[row][col] == 0) {
+            return false;
+        }
+
+        int numMarked = 0;
+        for (int k = -1; k <= 1; k++) {
+            for (int j = -1; j <= 1; j++) {
+                if ((row + k < rows) && (row + k >= 0) && (col + j < cols) && (col + j >= 0) && marked[row+k][col+j]) {
+                    numMarked++;
+                }
+            }
+        }
+
+        if (numMarked != board[row][col]) {
+            return false;
+        }
+
+        for (int k = -1; k <= 1; k++) {
+            for (int j = -1; j <= 1; j++) {
+                if ((row + k < rows) && (row + k >= 0) && (col + j < cols) && (col + j >= 0)) {
+                    reveal(row+k, col+j);
+                }
+            }
+        }
+
+        return true;
+    }
+
     public boolean mark(int row, int col) {
         if (!revealed[row][col]) {
             marked[row][col] = !marked[row][col];
