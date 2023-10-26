@@ -1,5 +1,3 @@
-package Minesweeper;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -197,20 +195,31 @@ public class Minesweeper {
         }
     }
 
+    private void cord(int row, int col) {
+        if (engine.cord(row, col)) {
+            moveMade(row, col);
+        }
+    }
+
     private void reveal(int row, int col) {
         if (engine.reveal(row, col)) {
-            updateTiles();
+            moveMade(row, col);
+        }
+    }
 
-            if (engine.getGameOver()) {
-                revealBombs();
-                gameOver();
-            }
+    private void moveMade(int row, int col) {
+        updateTiles();
+
+        if (engine.getGameOver()) {
+            revealBombs();
+            gameOver();
         }
     }
 
     private void makeFirstMove(int row, int col) {
         engine.makeFirstMove(row, col);
         updateTiles();
+        moveMade(row, col);
     }
 
     private void fixLastTile() {
@@ -305,9 +314,7 @@ public class Minesweeper {
         return panel;
     }
 
-    public static void main(String[] args) {
-        newSession();
-    }
+    public static void main(String[] args) { newSession(); }
 
     private class MouseClick implements MouseListener {
         private final int row;
@@ -324,10 +331,12 @@ public class Minesweeper {
 
             if (!engine.getGameOver()) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    if (engine.getFirstMoveMade()) {
-                        reveal(row, col);
-                    } else {
+                    if (!engine.getFirstMoveMade()) {
                         makeFirstMove(row, col);
+                    } else if (engine.getRevealed()[row][col]) {
+                        cord(row, col);
+                    } else {
+                        reveal(row, col);
                     }
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
                     mark(row, col);
